@@ -3,5 +3,14 @@
 {% block title %}Category {% endblock title %} 
 
 {% block main-content %}
-    <h1>Category : {{ val }}</h1>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-sm-3">
+                {% for val in title %}
+                    <a href="#m"class="list-group-item list-group-item-action" arial-current"true">{{val.title}}> </a>
+                {% endfor %}
+            </div>
+            <div class="col-sm-9"></div>
+        </div>
+    </div>
 {% endblock main-content %} 
