@@ -1,9 +1,11 @@
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from . models import Customer, Product
+from . models import Cart, Customer, Product
 from django.db.models import Count
 from . forms import CustomerProfileForm, CustomerRegistrationForm
 from django.contrib import messages
+from django.db.models import Q
 # Create your views here.
 
 def home(request):
@@ -96,4 +98,39 @@ class updateAddress(View):
         return redirect('address')
 
 def add_to_cart(request):
-    pass
+    user = request.user
+    product_id = request.GET.get("prod_id")
+    product = Product.objects.get(id=product_id)
+    Cart(user=user, product=product).save()
+    return redirect("/cart")
+
+def show_cart(request):
+    user = request.user
+    cart = Cart.objects.filter(user=user)
+    amount = 0
+    for p in cart:
+        value = p.quantity * p.product.discounted_price
+        amount = amount + value
+    totalamount = amount + 400
+    return render(request, "app/addtocart.html", locals())
+
+def plus_cart(request):
+    if request.method == 'GET':
+        prod_id = request.GET["prod_id"]
+        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
+        c.quantity += 1
+        c.save()
+        user = request.user
+        cart = Cart.objects.filter(user=user)
+        amount = 0
+        for p in cart:
+            value = p.quantity * p.product.discounted_price
+            amount = amount + value
+        totalamount = amount + 400
+        # print(prod_id)
+        data = {
+            "quantity": c.quantity,
+            "amount": amount,
+            "totalamount": totalamount,
+        }
+        return JsonResponse(data)
