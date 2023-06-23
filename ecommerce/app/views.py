@@ -114,6 +114,18 @@ def show_cart(request):
     totalamount = amount + 400
     return render(request, "app/addtocart.html", locals())
 
+class Checkout(View):
+    def get(self, request):
+        user = request.user
+        add = Customer.objects.filter(user=user)
+        cart_items = Cart.objects.filter(user=user)
+        famount = 0
+        for p in cart_items:
+            value = p.quantity * p.product.discounted_price
+            famount = famount + value
+        totalamount = famount + 400
+        return render(request, "app/checkout.html", locals())
+
 def plus_cart(request):
     if request.method == 'GET':
         prod_id = request.GET["prod_id"]
@@ -130,6 +142,48 @@ def plus_cart(request):
         # print(prod_id)
         data = {
             "quantity": c.quantity,
+            "amount": amount,
+            "totalamount": totalamount,
+        }
+        return JsonResponse(data)
+    
+def minus_cart(request):
+    if request.method == 'GET':
+        prod_id = request.GET["prod_id"]
+        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
+        c.quantity -= 1
+        c.save()
+        user = request.user
+        cart = Cart.objects.filter(user=user)
+        amount = 0
+        for p in cart:
+            value = p.quantity * p.product.discounted_price
+            amount = amount + value
+        totalamount = amount + 400
+        # print(prod_id)
+        data = {
+            "quantity": c.quantity,
+            "amount": amount,
+            "totalamount": totalamount,
+        }
+        return JsonResponse(data)
+    
+from django.http import JsonResponse
+from django.db.models import Q
+
+def remove_cart(request):
+    if request.method == 'GET':
+        prod_id = request.GET["prod_id"]
+        user = request.user
+        Cart.objects.filter(Q(product=prod_id) & Q(user=user)).delete()
+        cart = Cart.objects.filter(user=user)
+        amount = 0
+        for p in cart:
+            value = p.quantity * p.product.discounted_price
+            amount += value
+        totalamount = amount + 400
+
+        data = {
             "amount": amount,
             "totalamount": totalamount,
         }
