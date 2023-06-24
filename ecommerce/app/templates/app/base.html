@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}" />
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <title>Dairy Products | {% block title %}{% endblock title %}</title>
 </head>
@@ -70,7 +70,7 @@
               </ul>
             </li>
             <li class="nav-item mx-2">
-              <a href="#" class="nav-link text-white">Cart 4</a>
+              <a href="{% url 'showcart' %}" class="nav-link text-white">Cart 4</a>
             </li>
             <li class="nav-item mx-2">
               <a href="#" class="nav-link text-white">Wishlist 4</a>
@@ -92,6 +92,8 @@
     {% block information %}{% endblock information %}
 
     {% block main-content %}{% endblock main-content %}
+
+    {% block payment-gateway %}{% endblock payment-gateway %}
 
     <footer class="container-fluid fixed-bottom bg-success text-center p-2 mt-5">
         Copyright : 2023 || Develop by : Razak Tech

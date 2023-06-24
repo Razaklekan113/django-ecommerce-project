@@ -1,11 +1,13 @@
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from . models import Cart, Customer, Product
+import razorpay
+from . models import Cart, Customer, OrderPlaced, Payment, Product
 from django.db.models import Count
 from . forms import CustomerProfileForm, CustomerRegistrationForm
 from django.contrib import messages
 from django.db.models import Q
+from django.conf import settings
 # Create your views here.
 
 def home(request):
@@ -124,7 +126,45 @@ class Checkout(View):
             value = p.quantity * p.product.discounted_price
             famount = famount + value
         totalamount = famount + 400
+        razoramount = int(totalamount * 100)
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        data = { "amount": razoramount, "currency": "NGN", "receipt": "order_rcptid_12" }
+        payment_response = client.order.create(data=data)
+        print(payment_response)
+        # {'id': 'order_M5Qjvp4Dr6Xc4G', 'entity': 'order', 'amount': 56500, 'amount_paid': 0, 'amount_due': 56500, 'currency': 'NGN', 'receipt': 'order_rcptid_12', 'offer_id': None, 'status': 'created', 'attempts': 0, 'notes': [], 'created_at': 1687536175}
+        order_id = payment_response["id"]
+        order_status = payment_response["status"]
+        if order_status == "created":
+            payment = Payment(
+                user = user,
+                amount = totalamount,
+                razorpay_order_id = order_id,
+                razorpay_payment_status =  order_status,
+            )
+            payment.save()
+
         return render(request, "app/checkout.html", locals())
+    
+def payment_done(request):
+    order_id = request.GET.get('order_id')
+    payment_id = request.GET.get('payment_id')
+    cust_id = request.GET.get('cust_id')
+    # print("payment_done : old = ", order_id, "pid = ", payment_id, "cid = ", cust_id)
+    user = request.user
+    # return redirect('orders')
+    customer = Customer.objects.get(id=cust_id)
+    # To update payment status and payment id
+    payment = Payment.objects.get(razorpay_order_id=order_id)
+    payment.paid = True
+    payment.razorpay_payment_id = payment_id
+    payment.save()
+    # To save order details
+    cart = Cart.objects.filter(user=user)
+    for c in cart:
+        OrderPlaced(user=user, customer=customer, product=c.product, quantity=c.quantity, payment=payment).save()
+        c.delete()
+
+    return redirect('orders')
 
 def plus_cart(request):
     if request.method == 'GET':
@@ -168,8 +208,6 @@ def minus_cart(request):
         }
         return JsonResponse(data)
     
-from django.http import JsonResponse
-from django.db.models import Q
 
 def remove_cart(request):
     if request.method == 'GET':
