@@ -53,9 +53,9 @@
                 <a class="nav-link text-white" href="{% url 'contact' %}">Contact Us</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-dark" type="submit">Search</button>
+            <form class="d-flex" role="search" action="/search">
+              <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
+              <button class="btn btn-danger" type="submit">Search</button>
             </form>
           </div>
 
@@ -73,7 +73,7 @@
               <a href="{% url 'showcart' %}" class="nav-link text-white"> <span class="badge bg-danger">{% if totalitem > 0 %} {{ totalitem }}{% endif %} </span> Cart</a>
             </li>
             <li class="nav-item mx-2">
-              <a href="#" class="nav-link text-white">Wishlist 4</a>
+              <a href="#" class="nav-link text-white"><span class="badge bg-danger">{% if wishitem > 0 %} {{ wishitem }} {% endif %}</span>  <i class="fa fa-heart"></i></a>
             </li>
             {% else %}
             <li class="nav-item mx-2">
