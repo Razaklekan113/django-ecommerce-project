@@ -72,8 +72,8 @@ class Customer(models.Model):
     name = models.CharField(max_length=200)
     locality = models.CharField(max_length=200)
     city = models.CharField(max_length=50)
-    mobile = models.IntegerField(default=0)
-    zipcode = models.IntegerField()
+    mobile = models.BigIntegerField(default=0)
+    zipcode = models.BigIntegerField()
     state = models.CharField(choices=STATE_CHOICES, max_length=100)
 
     def __str__(self):
