@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Add this line to your HTML file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-vB98N5bD+Y6Qc6LQQfl0i1hWpZKAsu7b2lATBujggti3wQdX0G+y4lxZrS1LQ1EpgVGqG5a9aaMHV0aL9jrz8w==" crossorigin="anonymous" />
 
     <link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}" />
     <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}" />
@@ -96,8 +98,14 @@
     {% block payment-gateway %}{% endblock payment-gateway %}
 
     <footer class="container-fluid fixed-bottom bg-success text-center p-2 mt-5">
-        Copyright : 2023 || Develop by : Razak Tech
-    </footer>
+      <div class="row align-items-center">
+          <div class="col-12">
+              <p class="text-white mb-0">Copyright : 2023 || Develop by : Razak Tech</p>
+          </div>
+      </div>
+  </footer>
+  
+  
 
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
