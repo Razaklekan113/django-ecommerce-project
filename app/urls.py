@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_view
 from . forms import LoginForm, MyPasswordChangeForm, MyPasswordResetForm, MySetPasswordForm
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('', views.home),
@@ -50,3 +51,5 @@ urlpatterns = [
 admin.site.site_header = "Neel Dairy"
 admin.site.site_title = "Neel Dairy"
 admin.site.site_index_title = "Welcome To Neel Dairy Shop"
+
+urlpatterns == staticfiles_urlpatterns()
