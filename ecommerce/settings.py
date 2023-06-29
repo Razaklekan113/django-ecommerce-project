@@ -122,7 +122,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
 LOGIN_REDIRECT_URL = '/profile/'
 STATICFILES_DIRS = [BASE_DIR / "app" / "static"]
-STATIC_ROOT = BASE_DIR / "app" / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Default primary key field type
