@@ -1,4 +1,4 @@
-.env/
+env/
 ecommerce/__pycache__/
 app/__pycache__/
 app/migrations/__pycache__/
