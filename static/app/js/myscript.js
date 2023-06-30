@@ -65,11 +65,10 @@ $('.plus-wishlist').click(function(){
         url:"/pluswishlist",
         data:{
             prod_id:id
+        },
+        success:function(data){
+            window.location.reload();
         }
-        // success:function(data){
-            //alert(data.messsage);
-            // window.location.href = 'http://localhost:8000/product-detail/${id}'
-        // }
     })
 })
 
@@ -80,9 +79,9 @@ $('.minus-wishlist').click(function(){
         url:"/minuswishlist",
         data:{
             prod_id:id
+        },
+        success:function(data){
+            window.location.reload();
         }
-        // success:function(data){
-            // window.location.href = 'http://localhost:8000/product-detail/${id}'
-        // }
     })
 })
